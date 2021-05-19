@@ -1,11 +1,11 @@
-package com.example.newsapp.ui.main
+package com.example.newsapp.adapter
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import kotlin.collections.ArrayList
 
-class NewsViewPagerAdapter(fm: FragmentManager): FragmentPagerAdapter(fm) {
+class ViewPagerAdapter(fm: FragmentManager): FragmentPagerAdapter(fm) {
 
     private val fragments: ArrayList<Fragment> = ArrayList()
     private val fragmentTitle: ArrayList<String> = ArrayList()

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     tools:context=".ui.main.NewsListFragment">
 
     <com.rey.material.widget.ProgressView
@@ -29,9 +29,9 @@
         android:clipToPadding="false"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:paddingLeft="8dp"
-        app:layout_constraintTop_toTopOf="parent"
-        android:paddingRight="8dp"/>
+        android:padding="8dp"
+        tools:listitem="@layout/news_list_item"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

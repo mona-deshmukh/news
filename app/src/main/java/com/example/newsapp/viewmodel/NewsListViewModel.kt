@@ -2,7 +2,7 @@ package com.example.newsapp.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.*
-import com.example.newsapp.Articles
+import com.example.newsapp.Article
 import com.example.newsapp.News
 import com.example.newsapp.networkUtil.RetrofitClient
 import kotlinx.coroutines.CoroutineScope
@@ -14,16 +14,16 @@ import retrofit2.Callback
 import retrofit2.Response
 import kotlin.coroutines.CoroutineContext
 
-class NewsFragmentViewModel(application: Application) : AndroidViewModel(application),
+class NewsListViewModel(application: Application) : AndroidViewModel(application),
     CoroutineScope {
     private val parentJob = Job()
 
     override val coroutineContext: CoroutineContext
         get() = parentJob + Dispatchers.Default
 
-    private var _topHeadlines: MutableLiveData<List<Articles>>? = null
+    private var _topHeadlines: MutableLiveData<List<Article>>? = null
 
-    val topHeadlines: MutableLiveData<List<Articles>>
+    val topHeadlines: MutableLiveData<List<Article>>
         get() {
             if (_topHeadlines == null) {
                 _topHeadlines = MutableLiveData()
@@ -31,9 +31,9 @@ class NewsFragmentViewModel(application: Application) : AndroidViewModel(applica
 
             return _topHeadlines!!
         }
- private var _entertainmentNews: MutableLiveData<List<Articles>>? = null
+ private var _entertainmentNews: MutableLiveData<List<Article>>? = null
 
-    val entertainmentNews: MutableLiveData<List<Articles>>
+    val entertainmentNews: MutableLiveData<List<Article>>
         get() {
             if (_entertainmentNews == null) {
                 _entertainmentNews = MutableLiveData()
@@ -68,7 +68,7 @@ class NewsFragmentViewModel(application: Application) : AndroidViewModel(applica
         _loading?.postValue(true)
 
         launch {
-            val call: Call<News> = RetrofitClient.getClient.getTopHeadlines()
+            val call: Call<News> = RetrofitClient.getNewsClient.getTopHeadlines()
             call.enqueue(object : Callback<News> {
 
                 override fun onResponse(
@@ -87,28 +87,4 @@ class NewsFragmentViewModel(application: Application) : AndroidViewModel(applica
 
         _loading?.postValue(false)
     }
-    fun getScienceNews() {
-        _loading?.postValue(true)
-
-        launch {
-            val call: Call<News> = RetrofitClient.getClient.getEntertainmentNews()
-            call.enqueue(object : Callback<News> {
-
-                override fun onResponse(
-                    call: Call<News>?,
-                    response: Response<News>?
-                ) {
-                    _entertainmentNews?.postValue(response?.body()?.articles)
-                }
-
-                override fun onFailure(call: Call<News>?, t: Throwable?) {
-                    _error?.postValue("Something went wrong. Try again.")
-                }
-            })
-
-        }
-
-        _loading?.postValue(false)
-    }
-
 }

@@ -9,15 +9,15 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
 import com.example.newsapp.R
-import com.example.newsapp.adapter.NewsListAdapter
-import com.example.newsapp.viewmodel.NewsListViewModel
+import com.example.newsapp.adapter.BooksListAdapter
+import com.example.newsapp.viewmodel.BooksListViewModel
 import kotlinx.android.synthetic.main.fragment_layout.*
 
-class NewsListFragment : Fragment() {
-    private lateinit var viewModel: NewsListViewModel
-    private lateinit var newsAdapter: NewsListAdapter
+class BooksListFragment : Fragment() {
+    private lateinit var viewModel: BooksListViewModel
+    private lateinit var booksAdapter: BooksListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,52 +34,33 @@ class NewsListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-       
+
         init()
     }
     private fun init() {
-        viewModel = ViewModelProvider(this).get(NewsListViewModel::class.java)
-        viewModel.getTopHeadlines()
+        viewModel = ViewModelProvider(this).get(BooksListViewModel::class.java)
+        viewModel.getScienceBooks()
 
-        newsAdapter = NewsListAdapter(ArrayList())
-        newsAdapter.onImageClick = {
+        booksAdapter = BooksListAdapter(ArrayList())
+        booksAdapter.onImageClick = {
             val startWebView = Intent(activity, WebViewActivity::class.java).apply {
-                putExtra(INTENT_URL, it.url?.replace("http:", "https:"))
+                putExtra(INTENT_URL, it?.replace("http:", "https:"))
             }
             startActivity(startWebView)
         }
 
         recyclerView.apply {
-            layoutManager = LinearLayoutManager(activity)
-            adapter = newsAdapter
+            layoutManager = GridLayoutManager(activity, 2)
+            adapter = booksAdapter
         }
-        newsAdapter.notifyDataSetChanged()
+        booksAdapter.notifyDataSetChanged()
 
-        viewModel.topHeadlines.observe(viewLifecycleOwner, Observer {
+        viewModel.booksList.observe(viewLifecycleOwner, Observer {
             if (it == null)
                 return@Observer
 
-            newsAdapter.dataSource = it
-            newsAdapter.notifyDataSetChanged()
-            progressView.visibility = View.GONE
-            progressView.stop()
-        })
-        viewModel.entertainmentNews.observe(viewLifecycleOwner, Observer {
-            if (it == null)
-                return@Observer
-
-            newsAdapter.dataSource = it
-            newsAdapter.notifyDataSetChanged()
-            progressView.visibility = View.GONE
-            progressView.stop()
-        })
-
-        viewModel.topHeadlines.observe(viewLifecycleOwner, Observer {
-            if (it == null)
-                return@Observer
-
-            newsAdapter.dataSource = it
-            newsAdapter.notifyDataSetChanged()
+            booksAdapter.dataSource = it
+            booksAdapter.notifyDataSetChanged()
             progressView.visibility = View.GONE
             progressView.stop()
         })
@@ -95,14 +76,14 @@ class NewsListFragment : Fragment() {
     }
 
     companion object {
-        fun getAllNewsInstance(): NewsListFragment {
-            return NewsListFragment().apply {
+        fun getAllBooksInstance(): BooksListFragment {
+            return BooksListFragment().apply {
                 arguments = Bundle().apply {
                 }
             }
         }
     }
-    
+
     override fun onDestroyView() {
         super.onDestroyView()
 

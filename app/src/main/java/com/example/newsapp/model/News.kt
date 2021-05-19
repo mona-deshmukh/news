@@ -1,8 +1,8 @@
 package com.example.newsapp
 
-data class News(var articles: ArrayList<Articles>? = null)
+data class News(var articles: ArrayList<Article>? = null)
 
-data class Articles(
+data class Article(
     var title: String? = null,
     var description: String? = null,
     var url: String? = null,
